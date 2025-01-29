@@ -8,6 +8,7 @@ class Cuenta(val numCuenta: Int, var saldo: Double) {
                     return true
                 } else {
                     println("Una cuenta es nula o su saldo es negativo, la persona es morosa.")
+                    return false
                 }
             }
             return false
@@ -25,8 +26,8 @@ class Cuenta(val numCuenta: Int, var saldo: Double) {
                 return false
             }
 
-            val cuentaA = personaA.cuentas.getOrNull(numCuenta1)
-            val cuentaB = personaB.cuentas.getOrNull(numCuenta2)
+            val cuentaA = personaA.cuentas.find { it?.numCuenta == numCuenta1 }
+            val cuentaB = personaB.cuentas.find { it?.numCuenta == numCuenta2 }
 
             if (cuentaA == null || cuentaB == null) {
                 println("Una de las cuentas no existe.")
@@ -63,8 +64,8 @@ class Cuenta(val numCuenta: Int, var saldo: Double) {
     }
 
     fun realizarPago(cantidad: Double): Boolean {
-        if (cantidad <= 0 && cantidad > saldo) {
-            println("La cantidad está en un formato inválido.")
+        if (cantidad <= 0) {
+            println("La cantidad no puede ser negativa.")
             return false
         } else {
             saldo -= cantidad
