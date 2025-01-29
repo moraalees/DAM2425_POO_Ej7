@@ -1,11 +1,58 @@
-class Cuenta(val numCuenta: Int, var saldo: Double){
+class Cuenta(val numCuenta: Int, var saldo: Double) {
 
-    fun consultarSaldo(): String{
+    companion object {
+        fun esMorosa(persona: Persona): Boolean {
+            for (cuenta in persona.cuentas) {
+                if (cuenta != null && cuenta.saldo < 0) {
+                    println("Todas las cuentas tienen saldo positivo, la persona no es morosa.")
+                    return true
+                } else {
+                    println("Una cuenta es nula o su saldo es negativo, la persona es morosa.")
+                }
+            }
+            return false
+        }
+
+        fun realizarTransferencia(
+            personaA: Persona,
+            personaB: Persona,
+            numCuenta1: Int,
+            numCuenta2: Int,
+            cantidad: Double
+        ): Boolean {
+            if (cantidad <= 0) {
+                println("La cantidad a transferir no puede ser menor o igual que 0.")
+                return false
+            }
+
+            val cuentaA = personaA.cuentas.getOrNull(numCuenta1)
+            val cuentaB = personaB.cuentas.getOrNull(numCuenta2)
+
+            if (cuentaA == null || cuentaB == null) {
+                println("Una de las cuentas no existe.")
+                return false
+            }
+
+            if (cantidad > cuentaA.saldo) {
+                println("Saldo insuficiente en la cuenta de origen.")
+                return false
+            }
+
+            cuentaA.saldo -= cantidad
+            cuentaB.saldo += cantidad
+
+            println("Transferencia hecha con éxito.")
+            return true
+
+        }
+    }
+
+    fun consultarSaldo(): String {
         return "Su saldo es de ${saldo}€"
     }
 
-    fun recibirAbono(cantidad: Double): Boolean{
-        if (cantidad <= 0){
+    fun recibirAbono(cantidad: Double): Boolean {
+        if (cantidad <= 0) {
             println("El abono no puede ser negativo.")
             return false
         } else {
@@ -15,8 +62,8 @@ class Cuenta(val numCuenta: Int, var saldo: Double){
         }
     }
 
-    fun realizarPago(cantidad: Double): Boolean{
-        if (cantidad <= 0 && cantidad > saldo){
+    fun realizarPago(cantidad: Double): Boolean {
+        if (cantidad <= 0 && cantidad > saldo) {
             println("La cantidad está en un formato inválido.")
             return false
         } else {
@@ -25,17 +72,4 @@ class Cuenta(val numCuenta: Int, var saldo: Double){
             return true
         }
     }
-
-    fun personaMorosa(persona: Persona): Boolean{
-        for (cuenta in persona.cuentas){
-            if (cuenta != null && cuenta.saldo < 0){
-                println("Todas las cuentas tienen saldo positivo, no es morosa.")
-                return true
-            } else {
-                println("Una cuenta es nula o su saldo es negativo, es morosa.")
-            }
-        }
-        return false
-    }
-
 }
